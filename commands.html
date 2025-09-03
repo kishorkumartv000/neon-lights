@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Commands - ISO DATA</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">ISO DATA</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="bookmarks.html">Bookmarks</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="notes.html">Notes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Linux Commands</h1>
+
+        <form class="search-form">
+            <input type="search" id="searchInput" class="search-input" placeholder="Search for commands...">
+        </form>
+
+        <div id="commands-container">
+            <!-- Placeholder Category -->
+            <section class="category-section">
+                <h2 class="category-title">File System</h2>
+                <div class="content-entry">
+                    <h4>List files and directories</h4>
+                    <pre><code class="language-bash">ls -la</code></pre>
+                </div>
+                <div class="content-entry">
+                    <h4>Change directory</h4>
+                    <pre><code class="language-bash">cd /path/to/directory</code></pre>
+                </div>
+            </section>
+
+            <!-- Placeholder Category -->
+            <section class="category-section">
+                <h2 class="category-title">Networking</h2>
+                <div class="content-entry">
+                    <h4>Ping a host</h4>
+                    <pre><code class="language-bash">ping google.com</code></pre>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
