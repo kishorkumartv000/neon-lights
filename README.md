@@ -1,43 +1,41 @@
-# My GitHub Pages Site
+# ISO DATA - Personal Dashboard
 
-This is my personal website hosted on GitHub Pages. It serves as a portfolio to showcase my projects and skills.
+This project is a personal dashboard website designed for quick access to bookmarks, commands, and notes. It features a modern, dark theme inspired by media applications and includes an automated workflow for easily adding new content.
 
 ## Features
 
-- Responsive design that works on all devices
-- Clean and modern UI
-- Project showcase section
-- Contact form
-- Smooth scrolling navigation
+- **Multi-Page Dashboard**: Organized into three main sections:
+  - **Bookmarks**: A categorized, card-based view of your favorite websites.
+  - **Commands**: A collection of useful shell commands with syntax highlighting.
+  - **Notes**: A space for personal notes and thoughts.
+- **Live Search**: All pages include a search bar to instantly filter content.
+- **Copy to Clipboard**: A "Copy" button on each command block allows for easy copying with a single click.
+- **Automated Content Updates**: A GitHub Actions workflow allows for adding new bookmarks without manually editing any code.
 
-## Technologies Used
+## How to Use
 
-- HTML5
-- CSS3 (with Flexbox and Grid)
-- JavaScript (ES6)
-- Font Awesome icons
+### Adding a New Bookmark (The Easy Way)
 
-## Setup Instructions
+The easiest way to add a new bookmark is to use the built-in GitHub Action.
 
-1. Clone this repository
-2. Open `index.html` in your browser to view the site locally
-3. Customize the content to make it your own
+1.  **Go to the "Actions" Tab** in your GitHub repository.
+2.  On the left sidebar, click on the **"Add New Bookmark"** workflow.
+3.  Click the **"Run workflow"** dropdown button.
+4.  You will see a form with four fields:
+    - **The name of the website**: The title for the bookmark card.
+    - **The full URL of the website**: The link the bookmark should open.
+    - **A short description of the website**: The text that appears on the card.
+    - **Category**: The category for the bookmark. If the category doesn't exist, a new one will be created automatically.
+5.  Fill in the details and click the green **"Run workflow"** button.
 
-## Customization
+The workflow will run and automatically commit the new bookmark to your site.
 
-To customize this site for your own use:
+### Manually Editing Content
 
-1. Update the text content in `index.html`
-2. Replace the images in the `assets/images/` folder with your own
-3. Modify the color scheme by changing the CSS variables in `styles/main.css`
-4. Update the social media links in the footer
+While the workflow is best for bookmarks, you can still manually edit the content for the Commands and Notes pages.
 
-## License
+- **To add a new command**: Edit the `commands.html` file and copy an existing `<div class="content-entry">...</div>` block.
+- **To add a new note**: Edit the `notes.html` file and copy an existing `<div class="content-entry">...</div>` block.
+- **To add a new bookmark manually**: Edit the `bookmarks.html` file and copy an existing `<div class="card">...</div>` block inside the category of your choice.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## GitHub Pages
-
-This site is automatically published to GitHub Pages from the main branch. Any changes pushed to the main branch will be deployed within minutes.
-
-Visit the live site at: https://your-username.github.io
+This project is automatically published to GitHub Pages from the main branch. Any changes committed to the main branch will be deployed within minutes.
