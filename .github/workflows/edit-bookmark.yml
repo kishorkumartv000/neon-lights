@@ -1,0 +1,77 @@
+name: Edit Existing Bookmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name of the bookmark to edit (must be an exact match)'
+        required: true
+      new_name:
+        description: 'New Name (optional)'
+        required: false
+      new_url:
+        description: 'New URL (optional)'
+        required: false
+      new_description:
+        description: 'New Description (optional)'
+        required: false
+      new_category:
+        description: 'New Category (optional)'
+        required: false
+
+jobs:
+  edit_bookmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Edit bookmark in JSON
+        env:
+          BOOKMARK_NAME: "${{ github.event.inputs.name }}"
+          NEW_NAME: "${{ github.event.inputs.new_name }}"
+          NEW_URL: "${{ github.event.inputs.new_url }}"
+          NEW_DESC: "${{ github.event.inputs.new_description }}"
+          NEW_CAT: "${{ github.event.inputs.new_category }}"
+        run: |
+          python -c "
+          import json, os
+
+          bookmark_name = os.environ['BOOKMARK_NAME']
+          new_name = os.environ.get('NEW_NAME')
+          new_url = os.environ.get('NEW_URL')
+          new_desc = os.environ.get('NEW_DESC')
+          new_cat = os.environ.get('NEW_CAT')
+
+          with open('bookmarks.json', 'r+') as f:
+              data = json.load(f)
+              bookmark_found = False
+              for bookmark in data:
+                  if bookmark['name'] == bookmark_name:
+                      if new_name: bookmark['name'] = new_name
+                      if new_url: bookmark['url'] = new_url
+                      if new_desc: bookmark['description'] = new_desc
+                      if new_cat: bookmark['category'] = new_cat
+                      bookmark_found = True
+                      break
+
+              if not bookmark_found:
+                  print(f'Error: Bookmark with name \"{bookmark_name}\" not found.')
+                  exit(1)
+
+              f.seek(0)
+              f.truncate()
+              json.dump(data, f, indent=2)
+          "
+
+      - name: Build HTML from JSON
+        run: python3 build-bookmarks.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Edit bookmark - ${{ github.event.inputs.name }}"
+          file_pattern: "bookmarks.json bookmarks.html"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "github-actions-bot@users.noreply.github.com"
+          commit_author: "GitHub Actions Bot <github-actions-bot@users.noreply.github.com>"

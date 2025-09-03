@@ -1,0 +1,51 @@
+name: Delete Existing Bookmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name of the bookmark to delete (must be an exact match)'
+        required: true
+
+jobs:
+  delete_bookmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Delete bookmark from JSON
+        env:
+          BOOKMARK_NAME: "${{ github.event.inputs.name }}"
+        run: |
+          python -c "
+          import json, os
+
+          bookmark_name = os.environ['BOOKMARK_NAME']
+
+          with open('bookmarks.json', 'r+') as f:
+              data = json.load(f)
+
+              original_count = len(data)
+              data = [b for b in data if b['name'] != bookmark_name]
+
+              if len(data) == original_count:
+                  print(f'Error: Bookmark with name \"{bookmark_name}\" not found.')
+                  exit(1)
+
+              f.seek(0)
+              f.truncate()
+              json.dump(data, f, indent=2)
+          "
+
+      - name: Build HTML from JSON
+        run: python3 build-bookmarks.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Delete bookmark - ${{ github.event.inputs.name }}"
+          file_pattern: "bookmarks.json bookmarks.html"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "github-actions-bot@users.noreply.github.com"
+          commit_author: "GitHub Actions Bot <github-actions-bot@users.noreply.github.com>"

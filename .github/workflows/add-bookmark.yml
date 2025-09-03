@@ -1,0 +1,53 @@
+name: Add New Bookmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Bookmark Name'
+        required: true
+      url:
+        description: 'Bookmark URL'
+        required: true
+      description:
+        description: 'Bookmark Description'
+        required: true
+      category:
+        description: 'Bookmark Category (e.g., General, Software)'
+        required: true
+
+jobs:
+  add_bookmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Add new bookmark to JSON
+        run: |
+          python -c "
+          import json
+          new_bookmark = {
+              'name': '${{ github.event.inputs.name }}',
+              'url': '${{ github.event.inputs.url }}',
+              'description': '${{ github.event.inputs.description }}',
+              'category': '${{ github.event.inputs.category }}'
+          }
+          with open('bookmarks.json', 'r+') as f:
+              data = json.load(f)
+              data.append(new_bookmark)
+              f.seek(0)
+              json.dump(data, f, indent=2)
+          "
+
+      - name: Build HTML from JSON
+        run: python3 build-bookmarks.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Add new bookmark - ${{ github.event.inputs.name }}"
+          file_pattern: "bookmarks.json bookmarks.html"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "github-actions-bot@users.noreply.github.com"
+          commit_author: "GitHub Actions Bot <github-actions-bot@users.noreply.github.com>"
