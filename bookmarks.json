@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Google",
+    "url": "https://www.google.com",
+    "description": "The world's leading search engine.",
+    "category": "General"
+  },
+  {
+    "name": "YouTube",
+    "url": "https://www.youtube.com",
+    "description": "Your favorite videos and music.",
+    "category": "General"
+  },
+  {
+    "name": "GitHub",
+    "url": "https://www.github.com",
+    "description": "Where the world builds software.",
+    "category": "Software"
+  },
+  {
+    "name": "Stack Overflow",
+    "url": "https://stackoverflow.com",
+    "description": "Your source for programming questions.",
+    "category": "Software"
+  },
+  {
+    "name": "MDN Web Docs",
+    "url": "https://developer.mozilla.org",
+    "description": "Resources for developers, by developers.",
+    "category": "Software"
+  }
+]
