@@ -1,6 +1,6 @@
 # ISO DATA - Personal Dashboard
 
-This project is a personal dashboard website designed for quick access to bookmarks, commands, and notes. It features a modern, dark theme inspired by media applications and includes an automated workflow for easily adding new content.
+This project is a personal dashboard website designed for quick access to bookmarks, commands, and notes. It features a modern, dark theme and a data-driven architecture for managing content.
 
 ## Features
 
@@ -10,32 +10,36 @@ This project is a personal dashboard website designed for quick access to bookma
   - **Notes**: A space for personal notes and thoughts.
 - **Live Search**: All pages include a search bar to instantly filter content.
 - **Copy to Clipboard**: A "Copy" button on each command block allows for easy copying with a single click.
-- **Automated Content Updates**: A GitHub Actions workflow allows for adding new bookmarks without manually editing any code.
+- **Data-Driven Bookmarks**: Bookmarks are managed in a central `bookmarks.json` file, and the HTML is generated automatically, making the system robust and easy to manage.
+- **Automated Content Management**: A suite of GitHub Actions workflows allows for adding, editing, and deleting bookmarks without manually editing any code.
 
-## How to Use
+## How to Manage Your Bookmarks
 
-### Adding a New Bookmark (The Easy Way)
+All bookmark management is done through the **"Actions"** tab in your GitHub repository. You will find three workflows there.
 
-The easiest way to add a new bookmark is to use the built-in GitHub Action.
+### 1. To Add a New Bookmark
+- **Workflow**: `Add New Bookmark`
+- **How to use**:
+  1. Click the **"Run workflow"** button.
+  2. Fill in the `name`, `url`, `description`, and `category` for the new bookmark.
+  3. Click the green "Run workflow" button. A new bookmark will be created.
 
-1.  **Go to the "Actions" Tab** in your GitHub repository.
-2.  On the left sidebar, click on the **"Add New Bookmark"** workflow.
-3.  Click the **"Run workflow"** dropdown button.
-4.  You will see a form with four fields:
-    - **The name of the website**: The title for the bookmark card.
-    - **The full URL of the website**: The link the bookmark should open.
-    - **A short description of the website**: The text that appears on the card.
-    - **Category**: The category for the bookmark. If the category doesn't exist, a new one will be created automatically.
-5.  Fill in the details and click the green **"Run workflow"** button.
+### 2. To Edit an Existing Bookmark
+- **Workflow**: `Edit Existing Bookmark`
+- **How to use**:
+  1. Click **"Run workflow"**.
+  2. In the `name` field, type the **exact name** of the bookmark you want to change.
+  3. Fill in **only the fields you want to update** (e.g., `new_category` to move it, or `new_url` to fix a link). Leave the other "new_" fields blank.
+  4. Click the green "Run workflow" button.
 
-The workflow will run and automatically commit the new bookmark to your site.
+### 3. To Delete a Bookmark
+- **Workflow**: `Delete Existing Bookmark`
+- **How to use**:
+  1. Click **"Run workflow"**.
+  2. In the `name` field, type the **exact name** of the bookmark you want to delete.
+  3. Click the green "Run workflow" button.
 
-### Manually Editing Content
+After running any workflow, it will take a minute to complete. The workflow automatically updates your data and rebuilds the page.
 
-While the workflow is best for bookmarks, you can still manually edit the content for the Commands and Notes pages.
-
-- **To add a new command**: Edit the `commands.html` file and copy an existing `<div class="content-entry">...</div>` block.
-- **To add a new note**: Edit the `notes.html` file and copy an existing `<div class="content-entry">...</div>` block.
-- **To add a new bookmark manually**: Edit the `bookmarks.html` file and copy an existing `<div class="card">...</div>` block inside the category of your choice.
-
-This project is automatically published to GitHub Pages from the main branch. Any changes committed to the main branch will be deployed within minutes.
+### Manually Editing Other Content
+To add or change commands and notes, you can still edit the `commands.html` and `notes.html` files directly.
