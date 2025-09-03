@@ -2,11 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     
     if (searchInput) {
-        // This generic search function works for both commands and notes pages
-        const container = document.querySelector('#commands-container, #notes-container');
+        // This generic search function now works for bookmarks, commands, and notes pages
+        const container = document.querySelector('#bookmarks-container, #commands-container, #notes-container');
         if (!container) return;
 
-        const entries = container.querySelectorAll('.content-entry');
+        // Handle different content structures
+        const entries = container.querySelectorAll('.card, .content-entry');
         const sections = container.querySelectorAll('.category-section');
 
         searchInput.addEventListener('input', (e) => {
@@ -18,12 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 entry.style.display = shouldShow ? '' : 'none';
             });
 
-            // Hide category titles if all entries within them are hidden
-            sections.forEach(section => {
-                const visibleEntries = section.querySelectorAll('.content-entry[style*="display:"]');
-                const allEntries = section.querySelectorAll('.content-entry');
-                section.style.display = visibleEntries.length === allEntries.length && searchTerm !== '' ? 'none' : '';
-            });
+            // This part only applies to pages with categories (commands and notes)
+            if (sections.length > 0) {
+                sections.forEach(section => {
+                    // Check if any entries within this section are visible
+                    const visibleEntries = Array.from(section.querySelectorAll('.content-entry')).some(
+                        entry => entry.style.display !== 'none'
+                    );
+
+                    // Hide the section if no entries are visible
+                    section.style.display = visibleEntries ? '' : 'none';
+                });
+            }
         });
     }
 });

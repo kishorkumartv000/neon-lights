@@ -171,3 +171,21 @@ pre {
 code {
     font-family: 'Courier New', Courier, monospace;
 }
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--primary-text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #1ed760; /* A slightly lighter green for hover */
+    color: var(--primary-text-color);
+}
