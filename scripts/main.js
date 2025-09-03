@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 entry.style.display = shouldShow ? '' : 'none';
             });
 
-            // This part only applies to pages with categories (commands and notes)
+            // This part only applies to pages with categories
             if (sections.length > 0) {
                 sections.forEach(section => {
-                    // Check if any entries within this section are visible
-                    const visibleEntries = Array.from(section.querySelectorAll('.content-entry')).some(
+                    // Check if any entries within this section (.card or .content-entry) are visible
+                    const visibleEntries = Array.from(section.querySelectorAll('.card, .content-entry')).some(
                         entry => entry.style.display !== 'none'
                     );
 
@@ -33,4 +33,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Copy to clipboard functionality
+    const copyButtons = document.querySelectorAll('.copy-btn');
+    copyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const contentEntry = button.closest('.content-entry');
+            const codeBlock = contentEntry.querySelector('pre code');
+            if (codeBlock) {
+                navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            }
+        });
+    });
 });
