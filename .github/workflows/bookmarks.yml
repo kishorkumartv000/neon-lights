@@ -15,6 +15,10 @@ on:
         description: 'A short description of the website'
         required: true
         type: string
+      category:
+        description: 'Category for the bookmark (e.g., General, Software). If it doesn''t exist, it will be created.'
+        required: true
+        type: string
 
 jobs:
   add_bookmark:
@@ -23,20 +27,39 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Add new bookmark
+      - name: Add or update bookmark
         run: |
-          # The new HTML block to be added, with proper indentation.
-          # Note the use of four spaces for indentation to match the existing code.
-          NEW_BOOKMARK_HTML="                <div class=\"card\">\n                    <h3>${{ github.event.inputs.name }}</h3>\n                    <p>${{ github.event.inputs.description }}</p>\n                    <a href=\"${{ github.event.inputs.url }}\" class=\"btn\" target=\"_blank\">Open Site</a>\n                </div>"
+          # Prepare variables
+          BOOKMARK_NAME="${{ github.event.inputs.name }}"
+          BOOKMARK_URL="${{ github.event.inputs.url }}"
+          BOOKMARK_DESC="${{ github.event.inputs.description }}"
+          CATEGORY_NAME="${{ github.event.inputs.category }}"
 
-          # Use sed to insert the new bookmark before the placeholder comment.
-          # The marker is indented, so we match that.
-          sed -i "/<!-- BOOKMARK_CARD_GRID_END -->/i ${NEW_BOOKMARK_HTML}" bookmarks.html
+          # HTML for the new bookmark card, with proper indentation.
+          NEW_CARD_HTML="                    <div class=\"card\">\\n                        <h3>${BOOKMARK_NAME}<\\/h3>\\n                        <p>${BOOKMARK_DESC}<\\/p>\\n                        <a href=\"${BOOKMARK_URL}\" class=\"btn\" target=\"_blank\">Open Site<\\/a>\\n                    <\\/div>"
+
+          # Marker for the specific category
+          CATEGORY_MARKER="<!-- CARDS_FOR_${CATEGORY_NAME}_END -->"
+
+          # Check if the category already exists
+          if grep -q "$CATEGORY_MARKER" bookmarks.html; then
+            # Category exists, so insert the new card before its marker using sed replacement
+            # This is more robust than the previous awk script.
+            sed -i "s/$CATEGORY_MARKER/$NEW_CARD_HTML\\n                    $CATEGORY_MARKER/" bookmarks.html
+          else
+            # Category does not exist, so create a new section
+            NEW_CATEGORY_MARKER="<!-- CARDS_FOR_${CATEGORY_NAME}_END -->"
+            NEW_CATEGORY_HTML="            <section class=\"category-section\">\\n                <h2 class=\"category-title\">${CATEGORY_NAME}<\\/h2>\\n                <div class=\"card-grid\">\\n${NEW_CARD_HTML}\\n                    ${NEW_CATEGORY_MARKER}\\n                <\\/div>\\n            <\\/section>"
+            MAIN_MARKER="<!-- NEW_CATEGORIES_HERE -->"
+
+            # Insert the new category section before the main placeholder using sed replacement
+            sed -i "s/$MAIN_MARKER/$NEW_CATEGORY_HTML\\n            $MAIN_MARKER/" bookmarks.html
+          fi
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: Add new bookmark - ${{ github.event.inputs.name }}"
+          commit_message: "feat: Add bookmark '${{ github.event.inputs.name }}' to category '${{ github.event.inputs.category }}'"
           file_pattern: bookmarks.html
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "github-actions-bot@users.noreply.github.com"
