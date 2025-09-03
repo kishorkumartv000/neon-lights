@@ -1,0 +1,43 @@
+name: Add New Bookmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'The name of the website'
+        required: true
+        type: string
+      url:
+        description: 'The full URL of the website'
+        required: true
+        type: string
+      description:
+        description: 'A short description of the website'
+        required: true
+        type: string
+
+jobs:
+  add_bookmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Add new bookmark
+        run: |
+          # The new HTML block to be added, with proper indentation.
+          # Note the use of four spaces for indentation to match the existing code.
+          NEW_BOOKMARK_HTML="                <div class=\"card\">\n                    <h3>${{ github.event.inputs.name }}</h3>\n                    <p>${{ github.event.inputs.description }}</p>\n                    <a href=\"${{ github.event.inputs.url }}\" class=\"btn\" target=\"_blank\">Open Site</a>\n                </div>"
+
+          # Use sed to insert the new bookmark before the placeholder comment.
+          # The marker is indented, so we match that.
+          sed -i "/<!-- BOOKMARK_CARD_GRID_END -->/i ${NEW_BOOKMARK_HTML}" bookmarks.html
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Add new bookmark - ${{ github.event.inputs.name }}"
+          file_pattern: bookmarks.html
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "github-actions-bot@users.noreply.github.com"
+          commit_author: "GitHub Actions Bot <github-actions-bot@users.noreply.github.com>"
